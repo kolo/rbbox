@@ -1,0 +1,10 @@
+---
+- include: rbenv.yml
+
+- name: check if ruby installed
+  command: /bin/bash -lc "rbenv versions | grep {{ ruby_version }}"
+  register: is_ruby_installed
+  ignore_errors: true
+
+- include: ruby.yml
+  when: is_ruby_installed|failed

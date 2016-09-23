@@ -1,0 +1,16 @@
+---
+- name: install rbenv
+  git: repo=https://github.com/rbenv/rbenv.git dest=~/.rbenv
+
+- name: configure rbenv
+  command: ./src/configure chdir=~/.rbenv
+
+- name: compile rbenv
+  command: /usr/bin/make -C src chdir=~/.rbenv
+
+- name: install rbenv bash file
+  become: true
+  copy: src=rbenv.sh dest=/etc/profile.d mode=0755
+
+- name: install ruby-build plugin
+  git: repo=https://github.com/rbenv/ruby-build.git dest=~/.rbenv/plugins/ruby-build

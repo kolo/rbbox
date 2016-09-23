@@ -1,0 +1,19 @@
+---
+- name: update apt cache
+  apt: update_cache=yes
+
+- name: install ruby dependencies
+  apt: name={{ item }}
+  with_items:
+    - autoconf
+    - bison
+    - build-essential
+    - git-core
+    - libssl-dev
+    - libyaml-dev
+    - libreadline6-dev
+    - libncurses5-dev
+    - libffi-dev
+    - libgdbm3
+    - libgdbm-dev
+    - zlib1g-dev

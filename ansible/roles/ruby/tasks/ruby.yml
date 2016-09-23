@@ -1,0 +1,11 @@
+---
+- name: install ruby {{ ruby_version }}
+  command: /bin/bash -lc "rbenv install {{ ruby_version }}"
+  args:
+    creates: ~/.rbenv/versions/{{ ruby_version }}
+
+- name: set global ruby version
+  command: /bin/bash -lc "rbenv global {{ ruby_version }}"
+
+- name: rehash rbenv
+  command: /bin/bash -lc "rbenv rehash"
