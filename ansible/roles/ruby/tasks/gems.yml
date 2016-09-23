@@ -1,0 +1,7 @@
+---
+- name: setup .gemrc
+  copy: src=gemrc dest=~/.gemrc mode=0700
+- name: install gems
+  command: /bin/bash -lc "gem install {{ item }}"
+  with_items:
+    - bundler
