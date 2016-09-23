@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: update apt cache
+      apt: update_cache=yes
+    - name: install prerequirements
+      apt: name=git-core state=present
+    - name: install rbenv
+      become_user: vagrant
+      git: repo=https://github.com/rbenv/rbenv.git dest=~/.rbenv
+    - name: configure rbenv
+      become_user: vagrant
+      command: ./src/configure chdir=~/.rbenv
+    - name: compile rbenv
+      become_user: vagrant
+      command: /usr/bin/make -C src chdir=~/.rbenv
+    - name: ensure bash.d exists
+      become_user: vagrant
+      file: path=~/.bash.d state=directory
+    - name: install rbenv bash file
+      become_user: vagrant
+      copy: src=ansible/files/50_rbenv dest=~/.bash.d mode=700
+    - name: source rbenv bash file
+      lineinfile: dest=~/.bashrc regexp="^source ~/\.bash\.d/50_rbenv" insertafter=EOF line="source ~/.bash.d/50_rbenv"
+    - name: install ruby-build plugin
+      become_user: vagrant
+      git: repo=https://github.com/rbenv/ruby-build.git dest=~/.rbenv/plugins/ruby-build
+    - name: install ruby 2.3.1
+      become_user: vagrant
+      shell: rbenv install 2.3.1 executable=/bin/bash
